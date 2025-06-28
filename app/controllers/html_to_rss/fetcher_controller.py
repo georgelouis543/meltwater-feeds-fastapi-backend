@@ -13,7 +13,8 @@ async def get_javascript_page(url: str, render_cache_collection) -> str:
     try:
         # Check if the source has been cached for the given URL
         is_cached = await render_cache_collection.find_one({
-            "url": url
+            "url": url,
+            "is_javascript_enabled": True
         })
         if is_cached:
             logging.info(f"Found Cache. Returning Cached HTML for the URL: {url}")
@@ -46,6 +47,7 @@ async def get_javascript_page(url: str, render_cache_collection) -> str:
 
             await render_cache_collection.insert_one({
                 "url": url,
+                "is_javascript_enabled": True,
                 "html": result["content"]["data"],
                 "cached_at": datetime.datetime.now(datetime.UTC)
             })
@@ -71,7 +73,8 @@ async def get_static_html_page(url: str, render_cache_collection) -> str:
     try:
         # Check if the source has been cached for the given URL
         is_cached = await render_cache_collection.find_one({
-            "url": url
+            "url": url,
+            "is_javascript_enabled": False
         })
         if is_cached:
             logging.info(f"Found Cache. Returning Cached HTML for the URL: {url}")
@@ -86,6 +89,7 @@ async def get_static_html_page(url: str, render_cache_collection) -> str:
 
             await render_cache_collection.insert_one({
                 "url": url,
+                "is_javascript_enabled": False,
                 "html": result,
                 "cached_at": datetime.datetime.now(datetime.UTC)
             })
