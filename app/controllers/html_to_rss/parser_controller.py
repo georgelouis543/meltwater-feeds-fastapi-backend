@@ -16,15 +16,15 @@ async def parse_input_html(
 ) -> list:
     try:
         xpath_params = xpath_params.model_dump()
-        feed_url = xpath_params.get("url")
+        input_url = xpath_params.get("url")
 
-        if not feed_url:
+        if not input_url:
             raise HTTPException(status_code=400, detail="Bad Request")
 
         if xpath_params["is_javascript_enabled"] is True:
-            source_html = await get_javascript_page(feed_url, render_cache_collection)
+            source_html = await get_javascript_page(input_url, render_cache_collection)
         else:
-            source_html = await get_static_html_page(feed_url, render_cache_collection)
+            source_html = await get_static_html_page(input_url, render_cache_collection)
 
         html_parser = etree.HTMLParser()
         tree = etree.fromstring(source_html, html_parser)
@@ -51,20 +51,20 @@ def get_items(
 
     for item in items:
         temp_dict = {
-            "title": get_individual_field(item, xpath_params["title"]),
-            "description": get_individual_field(item, xpath_params["description"]),
-            "date": get_individual_field(item, xpath_params["date"]),
+            "title": get_individual_field(item, xpath_params["title_xpath"]),
+            "description": get_individual_field(item, xpath_params["description_xpath"]),
+            "published_date": get_individual_field(item, xpath_params["date_xpath"]),
             "source_name": xpath_params.get("source_name", "Meltwater"),
             "source_url": xpath_params.get("source_url", "https://app.meltwater.com"),
             "item_url": get_individual_field_with_literals(
                 item,
-                xpath_params["item_url"],
+                xpath_params["item_url_xpath"],
                 xpath_params["item_url_pre_literal"],
                 xpath_params["item_url_post_literal"]
             ),
             "image_url": get_image_url(
                 item,
-                xpath_params["image_url"],
+                xpath_params["image_url_xpath"],
                 xpath_params["image_url_pre_literal"],
                 xpath_params["image_url_post_literal"],
                 xpath_params.get("default_image_url", "")
