@@ -1,11 +1,15 @@
 import datetime
+from enum import Enum
 
 from pydantic import BaseModel, Field
 
+class FeedType(str, Enum):
+    html_to_rss = "html_to_rss"
 
 class HtmlRssFeedBase(BaseModel):
     url: str = Field(..., description="https://technikaufsohr.podigee.io/")
     is_javascript_enabled: bool = False
+    feed_type: FeedType = Field(default=FeedType.html_to_rss)
     item_xpath: str = Field(..., description="/html/body/div[1]/div/article")
     title_xpath: str = Field(..., description=".//header/h1/a/text()")
     description_xpath: str = Field(..., description=".//section[4]/p/text()")

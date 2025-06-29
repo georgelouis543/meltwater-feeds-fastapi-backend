@@ -11,6 +11,7 @@ from app.schema.html_to_rss import HtmlRssFeedRequest
 load_dotenv()
 GET_FEED_ENDPOINT = os.getenv("GET_FEED_ENDPOINT")
 
+
 async def create_feed(
         feed_request: HtmlRssFeedRequest,
         feed_collection,
