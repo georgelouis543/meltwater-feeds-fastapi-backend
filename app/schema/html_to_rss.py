@@ -1,10 +1,12 @@
 import datetime
 from enum import Enum
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, field_validator
+
 
 class FeedType(str, Enum):
     html_to_rss = "html_to_rss"
+
 
 class HtmlRssFeedBase(BaseModel):
     url: str = Field(..., description="https://technikaufsohr.podigee.io/")
@@ -25,6 +27,31 @@ class HtmlRssFeedBase(BaseModel):
     image_url_xpath: str = ""
     image_url_post_literal: str = ""
     default_image_url: str = Field(..., description="https://www.example.com/image1.png")
+
+    @field_validator("source_name", mode="before")
+    @classmethod
+    def strip_leading_trailing_spaces(cls, v):
+        return v.strip() if isinstance(v, str) else v
+
+    @field_validator(
+        "url",
+        "item_xpath",
+        "title_xpath",
+        "description_xpath",
+        "date_xpath",
+        "item_url_pre_literal",
+        "item_url_xpath",
+        "item_url_post_literal",
+        "source_url",
+        "image_url_pre_literal",
+        "image_url_xpath",
+        "image_url_post_literal",
+        "default_image_url",
+        mode="before"
+    )
+    @classmethod
+    def remove_all_spaces(cls, v):
+        return v.replace(" ", "") if isinstance(v, str) else v
 
 
 class HtmlRssFeedRequest(HtmlRssFeedBase):
@@ -48,9 +75,11 @@ class HtmlRssFeedRequest(HtmlRssFeedBase):
 class HtmlRssFeedRead(HtmlRssFeedBase):
     pass
 
+
 class HtmlRssFeedUpdateRequest(HtmlRssFeedBase):
     updated_at: datetime.datetime = Field(..., description="Date Updated")
     updated_by: str = "example@meltwater.com"
+
 
 class HtmlRssFeedResponse(BaseModel):
     feed_id: str = Field(..., description="saved feed id")
