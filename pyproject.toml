@@ -9,6 +9,7 @@ dependencies = [
     "lxml>=6.0.0",
     "pyjwt>=2.10.1",
     "pymongo>=4.13.2",
+    "python-dateutil>=2.9.0.post0",
     "python-dotenv>=1.1.0",
     "requests>=2.32.4",
 ]

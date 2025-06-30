@@ -23,8 +23,11 @@ async def root() -> dict:
 async def get_preview(
         xpath_params: HtmlRssFeedBase,
         render_cache_collection=Depends(get_render_cache_collection)
-):
-    preview_items = await parse_input_html(xpath_params, render_cache_collection)
+) -> list[dict]:
+    preview_items = await parse_input_html(
+        xpath_params,
+        render_cache_collection
+    )
     return preview_items
 
 
