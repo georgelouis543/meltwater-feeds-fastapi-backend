@@ -1,6 +1,8 @@
 import datetime
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, field_validator
+
+from app.helpers.data_preprocessors.strip_spaces import remove_leading_trailing_spaces
 
 
 class ItemDocumentBase(BaseModel):
@@ -13,9 +15,25 @@ class ItemDocumentBase(BaseModel):
     source_name: str = Field(..., description="Meltwater")
     image_url: str = Field(..., description="https://www.meltwater.com/image.jpeg")
     indexed_date: datetime.datetime = Field(
-        default=datetime.datetime.now(datetime.UTC),
+        default_factory=lambda:datetime.datetime.now(datetime.UTC),
         description="Timestamp when the item was indexed"
     )
+
+    @field_validator(
+        "title",
+        "description",
+        "published_date",
+        "item_url",
+        "source_url",
+        "source_name",
+        "image_url",
+        mode="before"
+    )
+    @classmethod
+    def clean_fields(cls, v):
+        return_field = remove_leading_trailing_spaces(v)
+        return return_field
+
 
 
 def individual_document_serial(document) -> dict:

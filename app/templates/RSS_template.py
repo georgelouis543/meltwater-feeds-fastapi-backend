@@ -31,7 +31,7 @@ def return_rss_output(
         rss_output += f'<description>\n'
         rss_output += f'{item["description"]}\n'
         rss_output += f'</description>\n'
-        rss_output += f'<media:content url="{item["image_url"]}" />\n'
+        rss_output += f'<media:content url="{item["image_url"]}"/>\n'
         rss_output += f'</item>\n'
 
     rss_output += f'</channel>\n'

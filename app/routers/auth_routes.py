@@ -1,4 +1,5 @@
 from fastapi import APIRouter, Depends
+from fastapi.security import OAuth2PasswordBearer
 from starlette.requests import Request
 
 from app.controllers.auth.login_controller import handle_login
@@ -12,6 +13,8 @@ router = APIRouter(
     prefix="/auth",
     tags=["auth"]
 )
+
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
 @router.get("")
 async def root() -> dict:

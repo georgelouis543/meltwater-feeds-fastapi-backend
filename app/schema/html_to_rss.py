@@ -55,7 +55,10 @@ class HtmlRssFeedBase(BaseModel):
 
 
 class HtmlRssFeedRequest(HtmlRssFeedBase):
-    feed_name: str = Field(default="MWFeed", description="Example Feed")
+    feed_name: str = Field(
+        default="MWFeed",
+        description="Example Feed"
+    )
     feed_description: str = Field(
         default="Created by Meltwater Feeds app",
         description="Provide a description for your feed"
@@ -63,11 +66,11 @@ class HtmlRssFeedRequest(HtmlRssFeedBase):
     created_by: str = "example@meltwater.com"
     updated_by: str = "example@meltwater.com"
     created_at: datetime.datetime = Field(
-        default=datetime.datetime.now(datetime.UTC),
+        default_factory=lambda:datetime.datetime.now(datetime.UTC),
         description="Date Created"
     )
     updated_at: datetime.datetime = Field(
-        default=datetime.datetime.now(datetime.UTC),
+        default_factory=lambda:datetime.datetime.now(datetime.UTC),
         description="Date Updated"
     )
 

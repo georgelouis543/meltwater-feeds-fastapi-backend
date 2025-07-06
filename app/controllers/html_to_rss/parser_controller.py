@@ -7,6 +7,7 @@ from app.controllers.html_to_rss.fetcher_controller import (
     get_static_html_page,
     get_javascript_page
 )
+from app.helpers.data_preprocessors.strip_spaces import remove_leading_trailing_spaces
 from app.schema.html_to_rss import HtmlRssFeedBase
 
 
@@ -81,7 +82,11 @@ def get_individual_field(
         individual_field_xpath: str
 ) -> str:
     try:
+
         field_to_return = str(item.xpath(individual_field_xpath)[0])
+
+        # Remove leading/trailing spaces before returning data
+        field_to_return = remove_leading_trailing_spaces(field_to_return)
 
         if field_to_return.startswith("<Element"):
             logging.warning(f"Skipping unexpected Element: {field_to_return}")
@@ -102,6 +107,10 @@ def get_individual_field_with_literals(
 ) -> str:
     try:
         extracted_value = str(item.xpath(individual_field_xpath)[0])
+
+        # Remove leading/trailing spaces before returning data
+        extracted_value = remove_leading_trailing_spaces(extracted_value)
+
         if extracted_value.startswith("<Element"):
             logging.warning(f"Skipping unexpected Element: {extracted_value}")
             return ""
@@ -130,6 +139,10 @@ def get_image_url(
 ) -> str:
     try:
         extracted_image_url = str(item.xpath(image_url_xpath)[0])
+
+        # Remove leading/trailing spaces before returning data
+        extracted_image_url = remove_leading_trailing_spaces(extracted_image_url)
+
         if extracted_image_url.startswith("<Element"):
             logging.warning(f"Skipping unexpected Element: {extracted_image_url}")
             raise Exception
