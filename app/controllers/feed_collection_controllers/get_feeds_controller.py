@@ -2,6 +2,7 @@ import logging
 from math import ceil
 
 from bson import ObjectId
+from fastapi import HTTPException
 from pymongo import DESCENDING
 
 from app.helpers.mongo_doc_serializer import list_mongo_collection_serialize
@@ -52,11 +53,8 @@ async def get_feeds_handler(
 
     except Exception as e:
         logging.warning(f"Exception while retrieving all feeds: {e}")
-        return {
-            "feeds": [],
-            "total": 0,
-            "page": 0,
-            "size": 0,
-            "pages": 0
-        }
+        raise HTTPException(
+            status_code=500,
+            detail=f"something went wrong while retrieving all feeds: {e}"
+        )
 
