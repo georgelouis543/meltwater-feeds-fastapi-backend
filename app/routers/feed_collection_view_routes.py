@@ -5,7 +5,7 @@ from fastapi import APIRouter, Depends, Query
 from app.controllers.feed_collection_controllers.get_feeds_controller import get_feeds_handler
 from app.middleware.verify_jwt import verify_access_token
 from app.middleware.verify_roles import verify_user_role
-from app.models.feeds_collection.feed import get_feed_collection
+from app.models.feed_collection_model import get_feed_collection
 from app.routers.auth_routes import oauth2_scheme
 from app.schema.feed_collection_schema import FeedsCollectionResponse
 

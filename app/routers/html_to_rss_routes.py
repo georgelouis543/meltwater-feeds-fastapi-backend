@@ -5,9 +5,9 @@ from app.controllers.html_to_rss.get_rss_controller import get_rss_feed
 from app.controllers.html_to_rss.parser_controller import parse_input_html
 from app.middleware.verify_jwt import verify_access_token
 from app.middleware.verify_roles import verify_user_role
-from app.models.documents_collection.document import get_documents_collection
-from app.models.feeds_collection.feed import get_feed_collection
-from app.models.html_to_rss.render_cache import get_render_cache_collection
+from app.models.document import get_documents_collection
+from app.models.feed_collection_model import get_feed_collection
+from app.models.render_cache import get_render_cache_collection
 from app.routers.auth_routes import oauth2_scheme
 from app.schema.html_to_rss import HtmlRssFeedBase, HtmlRssFeedRequest, HtmlRssFeedResponse
 

@@ -28,8 +28,10 @@ class HtmlRssFeedBase(BaseModel):
     image_url_post_literal: str = ""
     default_image_url: str = Field(..., description="https://www.example.com/image1.png")
 
-    @field_validator("source_name", mode="before")
-    @classmethod
+    @field_validator(
+        "source_name",
+        mode="before"
+    )
     def strip_leading_trailing_spaces(cls, v):
         return v.strip() if isinstance(v, str) else v
 
@@ -80,7 +82,7 @@ class HtmlRssFeedRead(HtmlRssFeedBase):
 
 class HtmlRssFeedUpdateRequest(HtmlRssFeedBase):
     updated_at: datetime.datetime = Field(..., description="Date Updated")
-    updated_by: str = "example@meltwater.com"
+    updated_by: str = "george.louis@meltwater.com"
 
 
 class HtmlRssFeedResponse(BaseModel):
