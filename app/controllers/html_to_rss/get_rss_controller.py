@@ -4,7 +4,7 @@ from bson import ObjectId
 
 from app.controllers.html_to_rss.crud.save_items_controller import save_items
 from app.controllers.html_to_rss.parser_controller import parse_input_html
-from app.schema.document import list_documents_serial
+from app.helpers.mongo_doc_serializer import list_mongo_collection_serialize
 from app.schema.html_to_rss import HtmlRssFeedBase, HtmlRssFeedRequest
 from app.templates.RSS_template import return_rss_output
 from app.templates.fallback_RSS_template import get_fallback_rss_output
@@ -40,7 +40,7 @@ async def get_rss_feed(
         items_from_doc_repo = await documents_collection.find({
             "feed_id": feed_id
         }).to_list(length=None)
-        serialized_items = list_documents_serial(items_from_doc_repo)
+        serialized_items = list_mongo_collection_serialize(items_from_doc_repo)
 
         output_rss_string = return_rss_output(
             HtmlRssFeedRequest(**feed_metadata),

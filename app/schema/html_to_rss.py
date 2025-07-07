@@ -49,7 +49,6 @@ class HtmlRssFeedBase(BaseModel):
         "default_image_url",
         mode="before"
     )
-    @classmethod
     def remove_all_spaces(cls, v):
         return v.replace(" ", "") if isinstance(v, str) else v
 
@@ -63,8 +62,8 @@ class HtmlRssFeedRequest(HtmlRssFeedBase):
         default="Created by Meltwater Feeds app",
         description="Provide a description for your feed"
     )
-    created_by: str = "example@meltwater.com"
-    updated_by: str = "example@meltwater.com"
+    created_by: str = "george.louis@meltwater.com"
+    updated_by: str = "george.louis@meltwater.com"
     created_at: datetime.datetime = Field(
         default_factory=lambda:datetime.datetime.now(datetime.UTC),
         description="Date Created"

@@ -2,7 +2,7 @@ import logging
 
 from fastapi import HTTPException
 
-from app.schema.document import ItemDocumentBase, list_documents_serial
+from app.schema.document import ItemDocumentBase
 
 
 async def save_items(
