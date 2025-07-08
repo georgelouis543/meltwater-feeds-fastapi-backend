@@ -16,10 +16,13 @@ async def create_feed(
         feed_request: HtmlRssFeedRequest,
         feed_collection,
         documents_collection,
-        render_cache_collection
+        render_cache_collection,
+        auth_token
 ) -> dict:
     try:
         feed_request = feed_request
+        #securely adding the author of the feed
+        feed_request.created_by = auth_token["user_email"]
 
         save_feed = await feed_collection.insert_one(dict(feed_request))
         saved_feed_id = str(save_feed.inserted_id)

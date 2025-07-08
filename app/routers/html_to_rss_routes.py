@@ -53,7 +53,8 @@ async def save_feed(
         feed_request,
         feed_collection,
         documents_collection,
-        render_cache_collection
+        render_cache_collection,
+        decoded_access_token
     )
     return result_data
 

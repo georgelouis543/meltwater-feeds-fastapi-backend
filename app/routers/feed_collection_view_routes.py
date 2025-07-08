@@ -3,6 +3,7 @@ from typing import Optional
 from fastapi import APIRouter, Depends, Query
 
 from app.controllers.feed_collection_controllers.delete_feed_controller import delete_feed_handler
+from app.controllers.feed_collection_controllers.duplicate_feed_controller import duplicate_feed_handler
 from app.controllers.feed_collection_controllers.get_feed_params_controller import get_individual_feed_params
 from app.controllers.feed_collection_controllers.get_feeds_controller import get_feeds_handler
 from app.middleware.verify_jwt import verify_access_token
@@ -83,3 +84,19 @@ async def delete_single_feed(
         feed_id
     )
     return delete_feed_result
+
+
+@router.get("/duplicate-feed")
+async def duplicate_single_feed(
+        feed_id: str,
+        token: str = Depends(oauth2_scheme),
+        feed_collection=Depends(get_feed_collection)
+):
+    decoded_access_token = verify_access_token(token)
+    verify_user_role(decoded_access_token, ALLOWED_ROLES)
+    duplicated_feed = await duplicate_feed_handler(
+        feed_id,
+        feed_collection,
+        decoded_access_token
+    )
+    return duplicated_feed
