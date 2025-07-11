@@ -3,16 +3,13 @@ import logging
 from fastapi import HTTPException
 from lxml import etree
 
-from app.controllers.html_to_rss.fetcher_controller import (
-    get_static_html_page,
-    get_javascript_page
-)
+from app.controllers.rss_playground.fetcher_controller import get_rss_response_body
 from app.helpers.data_preprocessors.strip_spaces import remove_leading_trailing_spaces
-from app.schema.html_to_rss import HtmlRssFeedBase
+from app.schema.rss_playground import RssToMWFeedBase
 
 
-async def parse_input_html(
-        xpath_params: HtmlRssFeedBase,
+async def parse_input_rss(
+        xpath_params: RssToMWFeedBase,
         render_cache_collection
 ) -> list:
     try:
@@ -22,21 +19,15 @@ async def parse_input_html(
         if not input_url:
             raise HTTPException(status_code=400, detail="Bad Request")
 
-        if xpath_params["is_javascript_enabled"] is True:
-            source_html = await get_javascript_page(
-                input_url,
-                render_cache_collection
-            )
-        else:
-            source_html = await get_static_html_page(
-                input_url,
-                render_cache_collection
-            )
+        rss_body = await get_rss_response_body(
+            input_url,
+            render_cache_collection
+        )
 
-        html_parser = etree.HTMLParser()
+        xml_parser = etree.XMLParser()
         tree = etree.fromstring(
-            source_html,
-            html_parser
+            rss_body,
+            xml_parser
         )
 
         items = get_items(tree, xpath_params)
@@ -67,8 +58,12 @@ def get_items(
             "title": get_individual_field(item, xpath_params["title_xpath"]),
             "description": get_individual_field(item, xpath_params["description_xpath"]),
             "published_date": get_individual_field(item, xpath_params["date_xpath"]),
-            "source_name": xpath_params.get("source_name") or "Meltwater",
-            "source_url": xpath_params.get("source_url") or "https://app.meltwater.com",
+            "source_name": get_individual_field(item, xpath_params["source_name_xpath"])
+                           or
+                           xpath_params.get("source_name"),
+            "source_url": get_individual_field(item, xpath_params["source_url_xpath"])
+                          or
+                          xpath_params.get("source_url"),
             "item_url": get_individual_field_with_literals(
                 item,
                 xpath_params["item_url_xpath"],
@@ -87,6 +82,7 @@ def get_items(
         items_to_return.append(temp_dict)
 
     return items_to_return
+
 
 
 def get_individual_field(

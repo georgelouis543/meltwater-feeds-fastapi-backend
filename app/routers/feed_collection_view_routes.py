@@ -67,7 +67,7 @@ async def get_single_feed(
 
 
 @router.delete(
-    "/delete-feed",
+    "/delete-feed/{feed_id}",
     response_model=DeleteFeedResponse
 )
 async def delete_single_feed(
