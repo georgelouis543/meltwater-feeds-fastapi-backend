@@ -26,7 +26,7 @@ async def parse_input_rss(
 
         xml_parser = etree.XMLParser()
         tree = etree.fromstring(
-            rss_body,
+            rss_body.encode("utf-8"),
             xml_parser
         )
 

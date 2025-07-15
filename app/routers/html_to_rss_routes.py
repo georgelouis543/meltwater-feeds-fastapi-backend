@@ -1,7 +1,6 @@
 from fastapi import APIRouter, Depends, Response
 
 from app.controllers.html_to_rss.crud.create_feed_controller import create_feed
-from app.controllers.html_to_rss.get_rss_controller import get_rss_feed
 from app.controllers.html_to_rss.parser_controller import parse_input_html
 from app.middleware.verify_jwt import verify_access_token
 from app.middleware.verify_roles import verify_user_role
@@ -21,7 +20,9 @@ ALLOWED_ROLES = ["user", "admin"]
 
 @router.get("")
 async def root() -> dict:
-    return {"message": "HTML to RSS converter Routes"}
+    return {
+        "message": "HTML to RSS converter Routes"
+    }
 
 
 @router.post("/get-preview")
@@ -39,7 +40,10 @@ async def get_preview(
     return preview_items
 
 
-@router.post("/save-feed", response_model=HtmlRssFeedResponse)
+@router.post(
+    "/save-feed",
+    response_model=HtmlRssFeedResponse
+)
 async def save_feed(
         feed_request: HtmlRssFeedRequest,
         token: str = Depends(oauth2_scheme),
@@ -57,22 +61,3 @@ async def save_feed(
         decoded_access_token
     )
     return result_data
-
-
-@router.get("/get-feed")
-async def get_feed(
-        feed_id: str,
-        documents_collection=Depends(get_documents_collection),
-        feed_collection=Depends(get_feed_collection),
-        render_cache_collection=Depends(get_render_cache_collection)
-):
-    result = await get_rss_feed(
-        feed_id,
-        documents_collection,
-        feed_collection,
-        render_cache_collection
-    )
-    return Response(
-        content=result,
-        media_type="text/rss+xml"
-    )
