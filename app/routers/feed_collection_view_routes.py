@@ -27,6 +27,7 @@ async def root() -> dict:
     return {"message": "feed collection routes"}
 
 
+# Get Paginated Feeds
 @router.get(
     "/get-all-feeds",
     response_model=FeedsCollectionResponse
