@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Depends, Response
 
 from app.controllers.html_to_rss.crud.create_feed_controller import create_feed
+from app.controllers.html_to_rss.crud.edit_feed_controller import update_html_to_rss_converted_feed
 from app.controllers.html_to_rss.parser_controller import parse_input_html
 from app.middleware.verify_jwt import verify_access_token
 from app.middleware.verify_roles import verify_user_role
@@ -59,5 +60,26 @@ async def save_feed(
         documents_collection,
         render_cache_collection,
         decoded_access_token
+    )
+    return result_data
+
+
+@router.put(
+    "/update-html-to-rss-converted-feed/{feed_id}",
+    response_model=HtmlRssFeedResponse
+)
+async def update_feed(
+        feed_id: str,
+        feed_update_request: HtmlRssFeedRequest,
+        token: str = Depends(oauth2_scheme),
+        feed_collection=Depends(get_feed_collection)
+):
+    decoded_access_token = verify_access_token(token)
+    verify_user_role(decoded_access_token, ALLOWED_ROLES)
+    result_data = await update_html_to_rss_converted_feed(
+        feed_id,
+        feed_update_request,
+        decoded_access_token,
+        feed_collection
     )
     return result_data

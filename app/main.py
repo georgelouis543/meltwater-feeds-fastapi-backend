@@ -1,5 +1,3 @@
-import datetime
-
 from fastapi import FastAPI
 
 from app.lifecycle import lifespan
@@ -30,5 +28,5 @@ app.include_router(get_feed_route.router)
 async def root():
     return {
         "message": "meltwater feeds revamped by Tyrone Slothrop",
-        "last committed": datetime.datetime.now(datetime.UTC)
+        "last committed": "Saturday 19 July 21:11:00 +0530"
     }

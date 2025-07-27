@@ -1,7 +1,11 @@
 import datetime
 from enum import Enum
 
-from pydantic import BaseModel, Field, field_validator
+from pydantic import (
+    BaseModel,
+    Field,
+    field_validator
+)
 
 
 class FeedType(str, Enum):
@@ -67,11 +71,11 @@ class HtmlRssFeedRequest(HtmlRssFeedBase):
     created_by: str = "george.louis@meltwater.com"
     updated_by: str = "george.louis@meltwater.com"
     created_at: datetime.datetime = Field(
-        default_factory=lambda:datetime.datetime.now(datetime.UTC),
+        default_factory=lambda: datetime.datetime.now(datetime.UTC),
         description="Date Created"
     )
     updated_at: datetime.datetime = Field(
-        default_factory=lambda:datetime.datetime.now(datetime.UTC),
+        default_factory=lambda: datetime.datetime.now(datetime.UTC),
         description="Date Updated"
     )
 
