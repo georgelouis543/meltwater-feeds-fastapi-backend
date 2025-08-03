@@ -57,4 +57,7 @@ async def save_items(
             await documents_collection.insert_many(documents_to_insert)
         except Exception as e:
             logging.warning(f"Exception {e} occurred while adding documents to the Doc Repo")
-            raise HTTPException(status_code=500, detail=f"Exception {e} occurred. Could not add documents")
+            raise HTTPException(
+                status_code=500,
+                detail=f"Exception {e} occurred. Could not add documents"
+            )

@@ -52,7 +52,7 @@ async def get_all_feeds(
     return feeds
 
 
-@router.get("/get-single-feed-params")
+@router.get("/get-single-feed-params/{feed_id}")
 async def get_single_feed(
         feed_id: str,
         token: str = Depends(oauth2_scheme),

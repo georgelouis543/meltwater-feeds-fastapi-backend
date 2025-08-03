@@ -30,42 +30,61 @@ async def update_html_to_rss_converted_feed(
 
         if existing_feed_data["url"] != new_feed_data["url"]:
             data_to_update["url"] = new_feed_data["url"]
+
         if existing_feed_data["is_javascript_enabled"] != new_feed_data["is_javascript_enabled"]:
             data_to_update["is_javascript_enabled"] = new_feed_data["is_javascript_enabled"]
+
         if existing_feed_data["feed_type"] != new_feed_data["feed_type"]:
             data_to_update["feed_type"] = new_feed_data["feed_type"]
+
         if existing_feed_data["item_xpath"] != new_feed_data["item_xpath"]:
             data_to_update["item_xpath"] = new_feed_data["item_xpath"]
+
         if existing_feed_data["title_xpath"] != new_feed_data["title_xpath"]:
             data_to_update["title_xpath"] = new_feed_data["title_xpath"]
+
         if existing_feed_data["description_xpath"] != new_feed_data["description_xpath"]:
             data_to_update["description_xpath"] = new_feed_data["description_xpath"]
+
         if existing_feed_data["date_regex"] != new_feed_data["date_regex"]:
             data_to_update["date_regex"] = new_feed_data["date_regex"]
+
         if existing_feed_data["date_xpath"] != new_feed_data["date_xpath"]:
             data_to_update["date_xpath"] = new_feed_data["date_xpath"]
+
         if existing_feed_data["use_index_date"] != new_feed_data["use_index_date"]:
             data_to_update["use_index_date"] = new_feed_data["use_index_date"]
+
         if existing_feed_data["item_url_pre_literal"] != new_feed_data["item_url_pre_literal"]:
             data_to_update["item_url_pre_literal"] = new_feed_data["item_url_pre_literal"]
+
         if existing_feed_data["item_url_xpath"] != new_feed_data["item_url_xpath"]:
             data_to_update["item_url_xpath"] = new_feed_data["item_url_xpath"]
+
         if existing_feed_data["item_url_post_literal"] != new_feed_data["item_url_post_literal"]:
             data_to_update["item_url_post_literal"] = new_feed_data["item_url_post_literal"]
+
         if existing_feed_data["source_name"] != new_feed_data["source_name"]:
             data_to_update["source_name"] = new_feed_data["source_name"]
+
         if existing_feed_data["source_url"] != new_feed_data["source_url"]:
             data_to_update["source_url"] = new_feed_data["source_url"]
+
         if existing_feed_data["image_url_pre_literal"] != new_feed_data["image_url_pre_literal"]:
             data_to_update["image_url_pre_literal"] = new_feed_data["image_url_pre_literal"]
+
         if existing_feed_data["image_url_xpath"] != new_feed_data["image_url_xpath"]:
             data_to_update["image_url_xpath"] = new_feed_data["image_url_xpath"]
+
         if existing_feed_data["image_url_post_literal"] != new_feed_data["image_url_post_literal"]:
             data_to_update["image_url_post_literal"] = new_feed_data["image_url_post_literal"]
+
         if existing_feed_data["default_image_url"] != new_feed_data["default_image_url"]:
             data_to_update["default_image_url"] = new_feed_data["default_image_url"]
+
         if existing_feed_data["feed_name"] != new_feed_data["feed_name"]:
             data_to_update["feed_name"] = new_feed_data["feed_name"]
+
         if existing_feed_data["feed_description"] != new_feed_data["feed_description"]:
             data_to_update["feed_description"] = new_feed_data["feed_description"]
 
