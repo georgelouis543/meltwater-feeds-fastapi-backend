@@ -28,5 +28,5 @@ app.include_router(get_feed_route.router)
 async def root():
     return {
         "message": "meltwater feeds revamped by Tyrone Slothrop",
-        "last committed": "Saturday 19 July 21:11:00 +0530"
+        "last committed": "Sunday 03 August 22:20:00 +0530"
     }
