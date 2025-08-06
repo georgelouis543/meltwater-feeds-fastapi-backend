@@ -3,6 +3,7 @@ import os
 from bson import ObjectId
 from dotenv import load_dotenv
 from fastapi import HTTPException
+from starlette.responses import Response
 
 from app.schema.html_to_rss import HtmlRssFeedRequest
 
@@ -27,66 +28,90 @@ async def update_html_to_rss_converted_feed(
         new_feed_data = feed_update_request.model_dump()
 
         data_to_update = {}
+        field_changed = False
 
         if existing_feed_data["url"] != new_feed_data["url"]:
+            field_changed = True
             data_to_update["url"] = new_feed_data["url"]
 
         if existing_feed_data["is_javascript_enabled"] != new_feed_data["is_javascript_enabled"]:
+            field_changed = True
             data_to_update["is_javascript_enabled"] = new_feed_data["is_javascript_enabled"]
 
         if existing_feed_data["feed_type"] != new_feed_data["feed_type"]:
+            field_changed = True
             data_to_update["feed_type"] = new_feed_data["feed_type"]
 
         if existing_feed_data["item_xpath"] != new_feed_data["item_xpath"]:
+            field_changed = True
             data_to_update["item_xpath"] = new_feed_data["item_xpath"]
 
         if existing_feed_data["title_xpath"] != new_feed_data["title_xpath"]:
+            field_changed = True
             data_to_update["title_xpath"] = new_feed_data["title_xpath"]
 
         if existing_feed_data["description_xpath"] != new_feed_data["description_xpath"]:
+            field_changed = True
             data_to_update["description_xpath"] = new_feed_data["description_xpath"]
 
         if existing_feed_data["date_regex"] != new_feed_data["date_regex"]:
+            field_changed = True
             data_to_update["date_regex"] = new_feed_data["date_regex"]
 
         if existing_feed_data["date_xpath"] != new_feed_data["date_xpath"]:
+            field_changed = True
             data_to_update["date_xpath"] = new_feed_data["date_xpath"]
 
         if existing_feed_data["use_index_date"] != new_feed_data["use_index_date"]:
+            field_changed = True
             data_to_update["use_index_date"] = new_feed_data["use_index_date"]
 
         if existing_feed_data["item_url_pre_literal"] != new_feed_data["item_url_pre_literal"]:
+            field_changed = True
             data_to_update["item_url_pre_literal"] = new_feed_data["item_url_pre_literal"]
 
         if existing_feed_data["item_url_xpath"] != new_feed_data["item_url_xpath"]:
+            field_changed = True
             data_to_update["item_url_xpath"] = new_feed_data["item_url_xpath"]
 
         if existing_feed_data["item_url_post_literal"] != new_feed_data["item_url_post_literal"]:
+            field_changed = True
             data_to_update["item_url_post_literal"] = new_feed_data["item_url_post_literal"]
 
         if existing_feed_data["source_name"] != new_feed_data["source_name"]:
+            field_changed = True
             data_to_update["source_name"] = new_feed_data["source_name"]
 
         if existing_feed_data["source_url"] != new_feed_data["source_url"]:
+            field_changed = True
             data_to_update["source_url"] = new_feed_data["source_url"]
 
         if existing_feed_data["image_url_pre_literal"] != new_feed_data["image_url_pre_literal"]:
+            field_changed = True
             data_to_update["image_url_pre_literal"] = new_feed_data["image_url_pre_literal"]
 
         if existing_feed_data["image_url_xpath"] != new_feed_data["image_url_xpath"]:
+            field_changed = True
             data_to_update["image_url_xpath"] = new_feed_data["image_url_xpath"]
 
         if existing_feed_data["image_url_post_literal"] != new_feed_data["image_url_post_literal"]:
+            field_changed = True
             data_to_update["image_url_post_literal"] = new_feed_data["image_url_post_literal"]
 
         if existing_feed_data["default_image_url"] != new_feed_data["default_image_url"]:
+            field_changed = True
             data_to_update["default_image_url"] = new_feed_data["default_image_url"]
 
         if existing_feed_data["feed_name"] != new_feed_data["feed_name"]:
+            field_changed = True
             data_to_update["feed_name"] = new_feed_data["feed_name"]
 
         if existing_feed_data["feed_description"] != new_feed_data["feed_description"]:
+            field_changed = True
             data_to_update["feed_description"] = new_feed_data["feed_description"]
+
+        if not field_changed:
+            return Response(status_code=204)
 
         # Using the same author metadata
         data_to_update["created_by"] = existing_feed_data["created_by"]
