@@ -4,8 +4,8 @@ import os
 from dotenv import load_dotenv
 from fastapi import HTTPException
 
-from app.controllers.html_to_rss.crud.save_items_controller import save_items
 from app.controllers.html_to_rss.parser_controller import parse_input_html
+from app.controllers.item_document_controllers.save_items_controller import save_items
 from app.schema.html_to_rss import HtmlRssFeedRequest
 
 load_dotenv()

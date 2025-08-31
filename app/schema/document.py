@@ -29,7 +29,6 @@ class ItemDocumentBase(BaseModel):
         "image_url",
         mode="before"
     )
-    @classmethod
     def clean_fields(cls, v):
         return_field = remove_leading_trailing_spaces(v)
         return return_field

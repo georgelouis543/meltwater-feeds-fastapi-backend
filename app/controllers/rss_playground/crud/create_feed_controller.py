@@ -4,7 +4,7 @@ import os
 from dotenv import load_dotenv
 from fastapi import HTTPException
 
-from app.controllers.rss_playground.crud.save_items_controller import save_items
+from app.controllers.item_document_controllers.save_items_controller import save_items
 from app.controllers.rss_playground.parser_controller import parse_input_rss
 from app.schema.rss_playground import RssToMWFeedRequest
 

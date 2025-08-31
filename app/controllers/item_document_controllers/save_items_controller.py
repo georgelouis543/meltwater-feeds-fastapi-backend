@@ -17,7 +17,7 @@ async def save_items(
             },
             {
                 "_id": 0,
-                "title": 1
+                "item_url": 1
             }
         )
         existing_items = await existing_items_cursor.to_list(length=None)
@@ -31,15 +31,15 @@ async def save_items(
         )
 
     # Use set for constant O(1) lookup
-    existing_titles = {
-        existing_item["title"] for existing_item in existing_items
+    existing_item_urls = {
+        existing_item["item_urls"] for existing_item in existing_items
     }
 
     documents_to_insert = []
 
     for item in items:
         try:
-            if item["title"] not in existing_titles:
+            if item["item_url"] not in existing_item_urls:
                 # Validate item using Pydantic
                 document = ItemDocumentBase(
                     **item,
