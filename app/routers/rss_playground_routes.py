@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Depends
 
 from app.controllers.rss_playground.crud.create_feed_controller import create_feed
+from app.controllers.rss_playground.crud.edit_feed_controller import update_rss_to_mwfeed_converted_feed
 from app.controllers.rss_playground.parser_controller import parse_input_rss
 from app.middleware.verify_jwt import verify_access_token
 from app.middleware.verify_roles import verify_user_role
@@ -61,5 +62,26 @@ async def save_feed(
         documents_collection,
         render_cache_collection,
         decoded_access_token
+    )
+    return result_data
+
+
+@router.put(
+    "/update-rss-to-mwfeed-converted-feed/{feed_id}",
+    response_model=RssToMWFeedResponse
+)
+async def update_feed(
+        feed_id: str,
+        feed_update_request: RssToMWFeedRequest,
+        token: str = Depends(oauth2_scheme),
+        feed_collection=Depends(get_feed_collection)
+):
+    decoded_access_token = verify_access_token(token)
+    verify_user_role(decoded_access_token, ALLOWED_ROLES)
+    result_data = await update_rss_to_mwfeed_converted_feed(
+        feed_id,
+        feed_update_request,
+        decoded_access_token,
+        feed_collection
     )
     return result_data
