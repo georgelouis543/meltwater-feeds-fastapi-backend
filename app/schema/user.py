@@ -1,3 +1,4 @@
+import datetime
 from enum import Enum
 from typing import Optional
 
@@ -30,7 +31,14 @@ class UserBase(BaseModel):
 
 
 class UserCreate(UserBase):
-    pass
+    created_at: datetime.datetime = Field(
+        default_factory=lambda: datetime.datetime.now(datetime.UTC),
+        description="Date Created"
+    )
+    updated_at: datetime.datetime = Field(
+        default_factory=lambda: datetime.datetime.now(datetime.UTC),
+        description="Date Updated"
+    )
 
 
 class UserRead(UserBase):

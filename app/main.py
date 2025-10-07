@@ -8,7 +8,8 @@ from app.routers import (
     html_to_rss_routes,
     feed_collection_view_routes,
     get_feed_route,
-    rss_playground_routes
+    rss_playground_routes,
+    admin_routes
 )
 
 configure_logging(LogLevels.info)
@@ -18,6 +19,7 @@ app = FastAPI(lifespan=lifespan)
 
 add_middlewares(app)
 
+app.include_router(admin_routes.router)
 app.include_router(auth_routes.router)
 app.include_router(html_to_rss_routes.router)
 app.include_router(feed_collection_view_routes.router)
@@ -28,5 +30,5 @@ app.include_router(get_feed_route.router)
 async def root():
     return {
         "message": "meltwater feeds revamped by Tyrone Slothrop",
-        "last committed": "Sunday 03 August 22:20:00 +0530"
+        "last committed": "Tuesday 07 October 15:52:00 +0530"
     }
