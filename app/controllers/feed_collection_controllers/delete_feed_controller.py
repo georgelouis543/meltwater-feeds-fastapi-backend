@@ -6,6 +6,7 @@ from fastapi import HTTPException
 
 
 async def delete_feed_handler(
+        auth_token,
         feed_collection,
         deleted_feeds_collection,
         feed_id: str
@@ -21,7 +22,16 @@ async def delete_feed_handler(
                 detail=f"Feed with ID: {feed_id} not found"
             )
 
-        # Add the deleted_at timestamp (TTL would be 1 month)
+        delete_requested_by = auth_token["user_email"]
+        feed_created_by = feed_to_delete_cursor["created_by"]
+
+        if feed_created_by != delete_requested_by:
+            raise HTTPException(
+                status_code=403,
+                detail="User not allowed to delete!"
+            )
+
+        # Adding the deleted_at timestamp (TTL would be 1 month)
         feed_to_delete_cursor["deleted_at"] = datetime.datetime.now(datetime.UTC)
 
         await deleted_feeds_collection.insert_one(

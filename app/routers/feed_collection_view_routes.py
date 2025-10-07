@@ -80,6 +80,7 @@ async def delete_single_feed(
     decoded_access_token = verify_access_token(token)
     verify_user_role(decoded_access_token, ALLOWED_ROLES)
     delete_feed_result = await delete_feed_handler(
+        decoded_access_token,
         feed_collection,
         deleted_feed_collection,
         feed_id
