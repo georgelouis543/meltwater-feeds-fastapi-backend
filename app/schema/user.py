@@ -21,7 +21,7 @@ class UserBase(BaseModel):
         min_length=1,
         description="firstname.lastname"
     )
-    role: UserRole = Field(default=UserRole.user)
+    user_role: UserRole = Field(default=UserRole.user)
 
     @field_validator("user_email")
     def email_must_be_meltwater(cls, v: str):
@@ -48,16 +48,11 @@ class UserRead(UserBase):
         from_attributes = True
 
 
-class UserUpdate(BaseModel):
-    user_email: Optional[str] = Field(None, min_length=13)
-    user_name: Optional[str] = Field(None, min_length=1)
-    role: Optional[UserRole] = Field(None)
-
-    @field_validator("user_email")
-    def email_must_be_meltwater(cls, v: str):
-        if v is not None and not v.endswith("@meltwater.com"):
-            raise ValueError("Email must be a meltwater.com address")
-        return v
+class UserUpdate(UserBase):
+    updated_at: datetime.datetime = Field(
+        default_factory=lambda: datetime.datetime.now(datetime.UTC),
+        description="Date Updated"
+    )
 
 
 class UpdatedUserResponse(BaseModel):
