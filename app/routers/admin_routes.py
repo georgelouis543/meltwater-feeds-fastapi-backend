@@ -2,6 +2,7 @@ from fastapi import APIRouter, Depends
 
 from app.controllers.admin.create_user_controller import create_user_handler
 from app.controllers.admin.edit_user_controller import update_user_handler
+from app.controllers.admin.get_single_user_controller import get_single_user_handler
 from app.middleware.verify_jwt import verify_access_token
 from app.middleware.verify_roles import verify_user_role
 from app.models.user import get_user_collection
@@ -50,5 +51,27 @@ async def update_user(
         user_collection
     )
     return result
+
+
+@router.get("/get-user/{user_id}")
+async def get_single_user(
+        user_id: str,
+        token: str = Depends(oauth2_scheme),
+        user_collection = Depends(get_user_collection)
+):
+    decoded_access_token = verify_access_token(token)
+    verify_user_role(decoded_access_token, ALLOWED_ROLES)
+    result = await get_single_user_handler(
+        user_collection,
+        user_id
+    )
+    return result
+
+
+@router.get("/get-all-users")
+async def get_all_users(
+
+):
+    pass
 
 
