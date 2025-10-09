@@ -65,3 +65,16 @@ class UpdatedUserResponse(BaseModel):
         from_attributes = True
 
 
+class UsersCollectionResponse(BaseModel):
+    users: list[dict]
+    total: int = 0
+    page: int = 0
+    size: int = 0
+    pages: int = 0
+
+
+class DeleteUserResponse(BaseModel):
+    message: str
+    success: bool
+
+
