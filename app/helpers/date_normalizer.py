@@ -1,6 +1,9 @@
 from datetime import datetime
 import logging
 
+from app.helpers.date_formats_list import date_fmts
+
+
 def normalize_date(
         raw_date: str,
         date_regex: str | None = None
@@ -16,7 +19,7 @@ def normalize_date(
             dt = datetime.strptime(raw_date.strip(), date_regex)
 
         else:
-            for fmt in ("%d-%m-%Y", "%Y-%m-%d", "%d/%m/%Y", "%b %d, %Y"):
+            for fmt in date_fmts:
                 try:
                     dt = datetime.strptime(raw_date.strip(), fmt)
                     break
