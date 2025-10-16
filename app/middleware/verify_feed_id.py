@@ -1,3 +1,4 @@
+from bson import ObjectId
 from fastapi import HTTPException
 
 
@@ -12,7 +13,24 @@ def verify_original_feed_id(
                 status_code=400,
                 detail="Missing feed_id or id parameter"
             )
-        return original_id
+
+        if id_:
+            try:
+                return int(id_)
+            except ValueError:
+                raise HTTPException(
+                    status_code=400,
+                    detail=f"Invalid legacy feed id: {id_}"
+                )
+
+        if feed_id:
+            if ObjectId.is_valid(feed_id):
+                return ObjectId(feed_id)
+            else:
+                raise HTTPException(
+                    status_code=400,
+                    detail=f"Invalid ObjectId: {feed_id}"
+                )
 
     except HTTPException as e:
         raise e

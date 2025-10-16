@@ -24,7 +24,14 @@ async def get_feeds_handler(
         skip = (page - 1) * size
 
         if feed_id:
-            query_filter["_id"] = ObjectId(feed_id)
+            if feed_id.isdigit():
+                query_filter["_id"] = int(feed_id)
+
+            elif ObjectId.is_valid(feed_id):
+                query_filter["_id"] = ObjectId(feed_id)
+
+            else:
+                raise HTTPException(status_code=400, detail="Invalid Feed ID!")
 
         if created_by:
             query_filter["created_by"] = created_by
@@ -50,6 +57,9 @@ async def get_feeds_handler(
             "size": size,
             "pages": pages
         }
+
+    except HTTPException as e:
+        raise e
 
     except Exception as e:
         logging.warning(f"Exception while retrieving all feeds: {e}")

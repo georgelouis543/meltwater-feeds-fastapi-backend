@@ -12,15 +12,22 @@ from app.templates.sharepoint_RSS_template import return_sharepoint_rss_output
 
 
 async def get_rss_feed(
-        feed_id: str,
+        feed_id,
         documents_collection,
         feed_collection
 ) -> str:
     try:
         feed_metadata = await feed_collection.find_one(
-            {"_id": ObjectId(feed_id)},
+            {"_id": feed_id},
             {"_id": 0}
         )
+
+        if not feed_metadata:
+            return get_fallback_rss_output(feed_id)
+
+        if feed_metadata["feed_type"] == "legacy_feed":
+            response = await redirect_to_legacy_feed(feed_id)
+            return response if response else get_fallback_rss_output(feed_id)
 
         items_from_doc_repo = await documents_collection.find({
             "feed_id": feed_id
@@ -49,10 +56,6 @@ async def get_rss_feed(
                 RssToMWFeedRequest(**feed_metadata),
                 serialized_items
             )
-
-        elif feed_metadata["feed_type"] == "legacy_feed":
-            response = await redirect_to_legacy_feed(feed_id)
-            return response if response else get_fallback_rss_output(feed_id)
 
         return output_rss_string
 
