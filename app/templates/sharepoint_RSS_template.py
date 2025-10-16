@@ -12,8 +12,7 @@ def return_sharepoint_rss_output(
 
     rss_output = ""
     rss_output += f'<?xml version="1.0" encoding="utf-8"?>\n'
-    rss_output += (f'<rss xmlns:dc="http://purl.org/dc/elements/1.1/" '
-                   f'xmlns:media="http://search.yahoo.com/mrss/ version="2.0">\n')
+    rss_output += f'<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:media="http://search.yahoo.com/mrss/ version="2.0">\n'
     rss_output += f'<channel>\n'
     rss_output += f'<title>{feed_metadata["feed_name"]}</title>\n'
     rss_output += f'<description>{feed_metadata["feed_description"]}</description>\n'
@@ -34,6 +33,7 @@ def return_sharepoint_rss_output(
         rss_output += f'<description>\n'
         rss_output += f'{item["description"]}\n'
         rss_output += f'</description>\n'
+        rss_output += f'<dc:creator />\n'
         rss_output += f'<media:thumbnail url="{item["image_url"]}"/>\n'
         rss_output += f'</item>\n'
 
