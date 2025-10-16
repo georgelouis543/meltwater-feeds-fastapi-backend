@@ -8,6 +8,7 @@ from app.controllers.html_to_rss.fetcher_controller import (
     get_javascript_page
 )
 from app.helpers.data_preprocessors.strip_spaces import remove_leading_trailing_spaces
+from app.helpers.date_normalizer import normalize_date
 from app.schema.html_to_rss import HtmlRssFeedBase
 
 
@@ -63,10 +64,13 @@ def get_items(
     items = tree.xpath(xpath_params["item_xpath"])
 
     for item in items:
+        raw_date = get_individual_field(item, xpath_params["date_xpath"])
+        date_regex = xpath_params.get("date_regex")
+
         temp_dict = {
             "title": get_individual_field(item, xpath_params["title_xpath"]),
             "description": get_individual_field(item, xpath_params["description_xpath"]),
-            "published_date": get_individual_field(item, xpath_params["date_xpath"]),
+            "published_date": normalize_date(raw_date, date_regex) or "",
             "source_name": xpath_params.get("source_name") or "Meltwater",
             "source_url": xpath_params.get("source_url") or "https://app.meltwater.com",
             "item_url": get_individual_field_with_literals(
