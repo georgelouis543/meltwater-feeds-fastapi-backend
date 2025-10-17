@@ -1,6 +1,7 @@
 import logging
 
 from bson import ObjectId
+from fastapi import HTTPException
 
 from app.controllers.legacy_feeds.serve_legacy_feed import redirect_to_legacy_feed
 from app.helpers.mongo_doc_serializer import list_mongo_collection_serialize
@@ -23,14 +24,14 @@ async def get_rss_feed(
         )
 
         if not feed_metadata:
-            return get_fallback_rss_output(feed_id)
+            raise HTTPException(status_code=404, detail="Feed Not found!")
 
         if feed_metadata["feed_type"] == "legacy_feed":
             response = await redirect_to_legacy_feed(feed_id)
             return response if response else get_fallback_rss_output(feed_id)
 
         items_from_doc_repo = await documents_collection.find({
-            "feed_id": feed_id
+            "feed_id": str(feed_id)
         }).to_list(length=None)
         serialized_items = list_mongo_collection_serialize(
             items_from_doc_repo

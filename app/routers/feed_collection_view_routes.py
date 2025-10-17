@@ -6,6 +6,7 @@ from app.controllers.feed_collection_controllers.delete_feed_controller import d
 from app.controllers.feed_collection_controllers.duplicate_feed_controller import duplicate_feed_handler
 from app.controllers.feed_collection_controllers.get_feed_params_controller import get_individual_feed_params
 from app.controllers.feed_collection_controllers.get_feeds_controller import get_feeds_handler
+from app.controllers.feed_collection_controllers.merge_feeds_controller import merge_feeds_handler
 from app.middleware.verify_jwt import verify_access_token
 from app.middleware.verify_roles import verify_user_role
 from app.models.deleted_feeds import get_deleted_feeds_collection
@@ -13,6 +14,7 @@ from app.models.feed_collection_model import get_feed_collection
 from app.routers.auth_routes import oauth2_scheme
 from app.schema.delete_feed import DeleteFeedResponse
 from app.schema.feed_collection_schema import FeedsCollectionResponse
+from app.schema.merge_feeds import MergeFeed
 
 router = APIRouter(
     prefix="/feed-collection-handler",
@@ -102,3 +104,19 @@ async def duplicate_single_feed(
         decoded_access_token
     )
     return duplicated_feed
+
+
+@router.post("/merge-feeds")
+async def merge_multiple_feeds(
+        feed_metadata: MergeFeed,
+        token: str = Depends(oauth2_scheme),
+        feed_collection=Depends(get_feed_collection)
+):
+    decoded_access_token = verify_access_token(token)
+    verify_user_role(decoded_access_token, ALLOWED_ROLES)
+    merged_feed = await merge_feeds_handler(
+        feed_metadata,
+        feed_collection,
+        decoded_access_token
+    )
+    return merged_feed
