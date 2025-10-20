@@ -15,7 +15,7 @@ async def merge_feeds_handler(
         feed_metadata = dict(feed_metadata)
 
         ids_to_merge = set(feed_metadata["feed_ids"])
-        if len(ids_to_merge) <= 0 or len(ids_to_merge) > 5:
+        if len(ids_to_merge) < 2 or len(ids_to_merge) > 5:
             raise HTTPException(
                 status_code=400,
                 detail="Nothing to merge or too much to merge!"
